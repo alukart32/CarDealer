@@ -7,10 +7,10 @@
 <h2>Catalog</h2>
 
 
-<form>
+<form method="get">
     <div class="form-inline">
-        <label class="control-panel"> Модели авто </>
-            <p> @Html.TextBox("model", "Выберете модель")</p>
+        <label class="control-panel"> Производитель авто </label>
+            <p> @Html.TextBox("manufacturer", "") </p>
             <input type="submit" value="Отправить">
     </div>
 </form>

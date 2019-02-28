@@ -26,14 +26,27 @@ namespace CarDealer.Controllers
             return View();
         }
 
-        public ActionResult Catalog(String str)
+        public ActionResult Catalog(String manufacturer)
         {
             CarContext db = new CarContext();
             //List<Car> products = db.Cars.Where(e => e.manufacturer.Equals("BMW")).ToList();
             //List<Car> cars = db.Cars.ToList();
             IQueryable < Car > cars = db.Cars;
-            if (str != "")
-                cars = cars.Where(e => e.manufacturer.Equals(str));
+
+            Boolean inModel = false;
+            if (manufacturer != "")
+                foreach (var item in cars)
+                {
+                    if (item.manufacturer.Equals(manufacturer))
+                    {
+                        inModel = true;
+                        break;    
+                    }
+                }
+
+                if (inModel && manufacturer != "")
+                    cars = cars.Where(e => e.manufacturer.Equals(manufacturer));
+                
             return View(cars);
         }
 
