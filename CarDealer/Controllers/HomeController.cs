@@ -1,5 +1,6 @@
 ﻿using CarDealer.Filter;
 using CarDealer.Models.Domain;
+using CarDealer.Models.Paging;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
 using System;
@@ -27,7 +28,9 @@ namespace CarDealer.Controllers
             return View();
         }
 
-        public ActionResult Catalog(String manufacturer, String model, String type)
+        public List<Car> page_cars;
+
+        public ActionResult Catalog(String manufacturer, String model, String type, String pageSizes, int page = 1)
         {
             CarContext db = new CarContext();
             //List<Car> products = db.Cars.Where(e => e.manufacturer.Equals("BMW")).ToList();
@@ -38,68 +41,74 @@ namespace CarDealer.Controllers
 
             if (manufacturer != null || model != null || type != null) {
                 
-                if (manufacturer != "")
-                {
-                    foreach (var item in cars)
-                    {
-                        if (item.manufacturer.Equals(manufacturer))
-                        {
-                            filterCar.manufacturerCars = cars.Where(e => e.manufacturer.Equals(manufacturer)).ToList();
-                            break;
-                        }
-                    }
-                }
+                filterCar.manufacturerCars = cars.Where(e => e.manufacturer.Equals(manufacturer)).ToList();
+                 
+                filterCar.modelCars = cars.Where(e => e.model.Equals(model)).ToList();
 
-                if (model != "")
-                {
-                    foreach (var item in cars)
-                    {
-                        if (item.model.Equals(model))
-                        {
-                            filterCar.modelCars = cars.Where(e => e.model.Equals(model)).ToList();
-                            break;
-                        }
-                    }
-                }
-
-                if (type != "")
-                {
-                    foreach (var item in cars)
-                    {
-                        if (item.type.Equals(type))
-                        {
-                           filterCar.typeCars = cars.Where(e => e.type.Equals(type)).ToList();
-                           break;
-                        }
-                    }
-                }
+                filterCar.typeCars = cars.Where(e => e.type.Equals(type)).ToList();
 
                 List<Car> filteredCars = null;
-                if (filterCar.manufacturerCars != null)
-                    filteredCars = filterCar.manufacturerCars;
 
-                if (filterCar.modelCars != null && filteredCars != null)
-                    filteredCars = filteredCars.Intersect(filterCar.modelCars.Where(e => e.manufacturer.Equals(manufacturer))).ToList();
-                else
-                    if(filterCar.modelCars != null)
-                    filteredCars = filterCar.modelCars;
-
-                if(filteredCars != null)
+                // есть 3 критерия
+                if (filterCar.manufacturerCars.Capacity != 0 && filterCar.modelCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
                 {
-                    if (filterCar.typeCars != null)
-                    {
-                        if (filterCar.modelCars != null)
-                            filteredCars = filteredCars.Intersect(filterCar.typeCars.Where(e => e.model.Equals(model))).ToList();
-                        else
-                            filteredCars = filterCar.typeCars;
-                    }
+                    filteredCars = filterCar.manufacturerCars;
+                    filteredCars = filteredCars.Intersect(filterCar.modelCars).ToList();
+                    filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
                 }
                 else
-                    return View(cars);
+                {
+                    // каких-то 2 критерия
+                    if(filterCar.manufacturerCars.Capacity != 0 && filterCar.modelCars.Capacity != 0)
+                    {
+                        filteredCars = filterCar.manufacturerCars;
+                        filteredCars = filteredCars.Intersect(filterCar.modelCars).ToList();
+                    }
+                    else
+                    {
+                        if(filterCar.manufacturerCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
+                        {
+                            filteredCars = filterCar.manufacturerCars;
+                            filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
+                        }
+                        else
+                        {
+                            if(filterCar.modelCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
+                            {
+                                filteredCars = filterCar.modelCars;
+                                filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
+                            }
+                            else
+                            {
+                                // один критерий
+                                if (filterCar.manufacturerCars.Capacity != 0)
+                                    filteredCars = filterCar.manufacturerCars;
+                                if(filterCar.modelCars.Capacity != 0)
+                                    filteredCars = filterCar.modelCars;
+                                if (filterCar.typeCars.Capacity != 0)
+                                    filteredCars = filterCar.typeCars;
+                            }
+                        }
+                    }
+                }
+                
+               page_cars = filteredCars;
 
-                return View(filteredCars);
+               if(page_cars == null )
+                    page_cars = cars.ToList();
             }
-            return View(cars);
+            else
+                page_cars = cars.ToList();
+
+            int pageSize = 5; 
+            if (pageSizes != null)
+                pageSize = int.Parse(pageSizes);
+
+           
+            IEnumerable<Car> carsPerPages = page_cars.Skip((page - 1) * pageSize).Take(pageSize);
+            CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = page_cars.Count };
+            CarIndexView ivm = new CarIndexView { PageInfo = pageInfo, Cars = carsPerPages };
+            return View(ivm);
         }
 
         public ActionResult OrderStatus(int ID, string msg, string mail)

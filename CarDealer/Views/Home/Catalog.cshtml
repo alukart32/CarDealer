@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CarDealer.Models.Domain.Car>
+﻿@model CarDealer.Models.Paging.CarIndexView
+@using CarDealer.Models.Paging
 
 @{
     ViewBag.Title = "Catalog";
@@ -10,40 +11,46 @@
 <form method="get">
     <div class="form-inline">
         <label class="control-panel"> Фильтр авто </label>
-            <h5 class="header-3">Производитель</h5>
-            <p>
-                @Html.TextBox("manufacturer", "") </h3>
-
+        <h5 class="header-3">Производитель</h5>
+        <p>
+            @Html.TextBox("manufacturer", "") </h3>
             <h5 class="header-3">Модель</h5>
-                      <p> @Html.TextBox("model", "") </p>
+        <p> @Html.TextBox("model", "") </p>
 
-                  <h5 class="header-3">Тип</h5>
-                       <p> @Html.TextBox("type", "") </p>
-                  <input type="submit" value="Получить">
-</div>
+        <h5 class="header-3">Тип</h5>
+        <p> @Html.TextBox("type", "") </p>
+        <input type="submit" value="Получить">
+
+        <h5 class="header-5">Pages</h5>
+        <p> @Html.TextBox("pageSizes", "") </p>
+        <input type="submit" value="Получить" class="col-md-1">
+
+    </div>
 </form>
+
+</br>
 
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.manufacturer)
+        <th class="header-3">
+            Manufacturer
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.country)
+        <th class="header-3">
+            Country
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.type)
+        <th class="header-3">
+            Type
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.model)
+        <th class="header-3">
+            Model
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.price)
+        <th class="header-3">
+            Price
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Cars)
     {
         <tr>
             <td>
@@ -63,5 +70,11 @@
             </td>
         </tr>
     }
-
 </table>
+</br>
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))
+</div>
+
+
