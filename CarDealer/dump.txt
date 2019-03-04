@@ -1,0 +1,54 @@
+﻿Boolean tagInManufacture = false;
+            Boolean tagInModel = false;
+            Boolean tagInType = false;
+            if (manufacturer != "" || model != "" || type != "")
+            {
+                foreach (var item in cars)
+                {
+                    if (item.manufacturer.Equals(manufacturer))
+                    {
+                        tagInManufacture = true;
+                        break;
+                    }
+                }
+                foreach (var item in cars)
+                {
+                    if (item.manufacturer.Equals(model))
+                    { 
+                        tagInModel = true;
+                        break;
+                    }
+                }
+
+                foreach (var item in cars)
+                {
+                    if (item.manufacturer.Equals(type))
+                    { 
+                        tagInType = true;
+                        break;
+                    }
+                }
+            }
+
+            if ((tagInManufacture || tagInModel || tagInType) 
+                && ( manufacturer != "" || model != "" || type != ""))
+            {
+                IQueryable<Car> allCar;
+                if (tagInManufacture)
+                {
+                    IQueryable<Car> temp = cars.Where(e => e.manufacturer.Equals(manufacturer));
+                    allCar.Intersect(temp);
+                }
+
+                if (tagInModel)
+                {
+                    IQueryable<Car> temp = cars.Where(e => e.manufacturer.Equals(model));
+                    allCar.Intersect(temp);
+                }
+
+                if(tagInType)
+                {
+                    IQueryable<Car> temp = cars.Where(e => e.manufacturer.Equals(type));
+                    allCar.Intersect(temp);
+                }
+                

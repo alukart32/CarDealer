@@ -1,4 +1,5 @@
-﻿using CarDealer.Models.Domain;
+﻿using CarDealer.Filter;
+using CarDealer.Models.Domain;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
 using System;
@@ -26,27 +27,78 @@ namespace CarDealer.Controllers
             return View();
         }
 
-        public ActionResult Catalog(String manufacturer)
+        public ActionResult Catalog(String manufacturer, String model, String type)
         {
             CarContext db = new CarContext();
             //List<Car> products = db.Cars.Where(e => e.manufacturer.Equals("BMW")).ToList();
             //List<Car> cars = db.Cars.ToList();
-            IQueryable < Car > cars = db.Cars;
+            IQueryable<Car> cars = db.Cars;
 
-            Boolean inModel = false;
-            if (manufacturer != "")
-                foreach (var item in cars)
+            FilterCar filterCar = new FilterCar();
+
+            if (manufacturer != null || model != null || type != null) {
+                
+                if (manufacturer != "")
                 {
-                    if (item.manufacturer.Equals(manufacturer))
+                    foreach (var item in cars)
                     {
-                        inModel = true;
-                        break;    
+                        if (item.manufacturer.Equals(manufacturer))
+                        {
+                            filterCar.manufacturerCars = cars.Where(e => e.manufacturer.Equals(manufacturer)).ToList();
+                            break;
+                        }
                     }
                 }
 
-                if (inModel && manufacturer != "")
-                    cars = cars.Where(e => e.manufacturer.Equals(manufacturer));
-                
+                if (model != "")
+                {
+                    foreach (var item in cars)
+                    {
+                        if (item.model.Equals(model))
+                        {
+                            filterCar.modelCars = cars.Where(e => e.model.Equals(model)).ToList();
+                            break;
+                        }
+                    }
+                }
+
+                if (type != "")
+                {
+                    foreach (var item in cars)
+                    {
+                        if (item.type.Equals(type))
+                        {
+                           filterCar.typeCars = cars.Where(e => e.type.Equals(type)).ToList();
+                           break;
+                        }
+                    }
+                }
+
+                List<Car> filteredCars = null;
+                if (filterCar.manufacturerCars != null)
+                    filteredCars = filterCar.manufacturerCars;
+
+                if (filterCar.modelCars != null && filteredCars != null)
+                    filteredCars = filteredCars.Intersect(filterCar.modelCars.Where(e => e.manufacturer.Equals(manufacturer))).ToList();
+                else
+                    if(filterCar.modelCars != null)
+                    filteredCars = filterCar.modelCars;
+
+                if(filteredCars != null)
+                {
+                    if (filterCar.typeCars != null)
+                    {
+                        if (filterCar.modelCars != null)
+                            filteredCars = filteredCars.Intersect(filterCar.typeCars.Where(e => e.model.Equals(model))).ToList();
+                        else
+                            filteredCars = filterCar.typeCars;
+                    }
+                }
+                else
+                    return View(cars);
+
+                return View(filteredCars);
+            }
             return View(cars);
         }
 

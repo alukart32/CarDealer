@@ -9,10 +9,18 @@
 
 <form method="get">
     <div class="form-inline">
-        <label class="control-panel"> Производитель авто </label>
-            <p> @Html.TextBox("manufacturer", "") </p>
-            <input type="submit" value="Отправить">
-    </div>
+        <label class="control-panel"> Фильтр авто </label>
+            <h5 class="header-3">Производитель</h5>
+            <p>
+                @Html.TextBox("manufacturer", "") </h3>
+
+            <h5 class="header-3">Модель</h5>
+                      <p> @Html.TextBox("model", "") </p>
+
+                  <h5 class="header-3">Тип</h5>
+                       <p> @Html.TextBox("type", "") </p>
+                  <input type="submit" value="Получить">
+</div>
 </form>
 
 <table class="table">
