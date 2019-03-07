@@ -17,63 +17,89 @@
         <div class="row">
             <div class="col-md-2">
                 <h5 class="header-3">Производитель</h5>
-                    <input list="manufacturerList" name="manufacturerList" autofocus>
-                    <datalist id="manufacturerList">
-                        <option value="BMW">
-                        <option value="Audi">
-                        <option value="Fiat">
-                        <option value="Opel">
-                        <option value="Skoda">
-                        <option value="Volkswagen">
-                        <option value="Volvo">
-                    </datalist>
+                <input list="manufacturerList" name="manufacturerList" autofocus>
+                <datalist id="manufacturerList">
+                    <option value="BMW">
+                    <option value="Audi">
+                    <option value="Fiat">
+                    <option value="Opel">
+                    <option value="Skoda">
+                    <option value="Volkswagen">
+                    <option value="Volvo">
+                </datalist>
             </div>
-            
+
             <div class="col-md-2">
                 <h5 class="header-3">Модель</h5>
                 @Html.TextBox("model", "")
             </div>
-            
+
             <div class="col-md-2">
                 <h5 class="header-3">Тип</h5>
                 <p> @Html.TextBox("type", "") </p>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-1">
-                <p>3</p>
-                <input type="radio" name="pageSizes" value="3">
+            <div class="col-md-2">
+                <h5 class="header-3">Сравнить как</h5>
+                <input list="relationList" name="relationList">
+                <datalist id="relationList">
+                    <option value="<">
+                    <option value="<=">
+                    <option value=">">
+                    <option value=">=">
+                    <option value="=">
+                </datalist>
             </div>
-            <div class="col-md-1">
-                <p>5</p>
-                <input type="radio" name="pageSizes" value="5">
-            </div>
-            <div class="col-md-1">
-                <p>8</p>
-                <input type="radio" name="pageSizes" value="8">
-            </div>
-            <div class="col-md-1">
-                <p>all</p>
-                <input type="radio" name="pageSizes" value="50">
-            </div>
-        </div>
 
-        <!--<input type="range" name="pageSizes" min="3" max="50"/>-->
+            <div class="col-md-2">
+                <h5 class="header-3">Цена</h5>
+                <p> @Html.TextBox("price", 1) </p>
+            </div>
+
+        </div>
+   
         <br />
-
+        
         <div class="row">
             <div class="col-md-1">
                 <input type="submit" value="Получить">
             </div>
             <div class="col-md-1">
-                <input type="reset" value="Отчистить">
+                <input type="reset" value="Обнулить">
             </div>
         </div>
     </div>
 </form>
 
-<br/>
+<br />
+
+<!-- Потом, если захочу
+<form>
+    <div class="row">
+        <div class="col-md-push-3">
+            <div class="btn-group">
+                <div class="col-md-1">
+                    <input type="checkbox" name="pageSizes" value="3">3
+                </div>
+                <div class="col-md-1">
+                    <input type="hidden" name="pageSizes" value="5" />
+                    <input type="checkbox" name="pageSizes" value="5">5
+                </div>
+                <div class="col-md-1">
+                    <input type="checkbox" name="pageSizes" value="8">8
+                </div>
+                <div class="col-md-1">
+                    <input type="checkbox" name="pageSizes" value="50">all
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" value="Refresh Pages" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+-->
+<br />
 
 <table class="table">
     <tr>
@@ -116,7 +142,7 @@
         </tr>
     }
 </table>
-<br/>
+<br />
 
 <div class="btn-group">
     @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))

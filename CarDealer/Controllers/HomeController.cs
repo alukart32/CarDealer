@@ -29,7 +29,7 @@ namespace CarDealer.Controllers
         }
 
         public List<Car> page_cars;
-        public ActionResult Catalog(String manufacturerList, String model, String type, int pageSizes = 4, int page = 1)
+        public ActionResult Catalog(String manufacturerList, String model, String type, String price, String relationList, int page = 1)
         {
             CarContext db = new CarContext();
             IQueryable<Car> cars = db.Cars;
@@ -43,6 +43,29 @@ namespace CarDealer.Controllers
             if (type != "" && type != null)
                 cars = cars.Where(e => e.type.Equals(type));
 
+            if(price != "" && price != null)
+            {
+                decimal d = decimal.Parse(price);
+
+                switch (relationList)
+                {
+                    case "<":
+                        cars = cars.Where(e => e.price < d);
+                        break;
+                    case "<=":
+                        cars = cars.Where(e => e.price <= d);
+                        break;
+                    case ">":
+                        cars = cars.Where(e => e.price > d);
+                        break;
+                    case ">=":
+                        cars = cars.Where(e => e.price >= d);
+                        break;
+                    case "=":
+                        cars = cars.Where(e => e.price == d);
+                        break;
+                }
+            }
 
             /*
             if ((manufacturer != "" && manufacturer != null)
@@ -109,9 +132,8 @@ namespace CarDealer.Controllers
 
             page_cars = cars.ToList();
 
-            int pageSize = 3;
-            if (pageSizes != 0)
-                pageSize = pageSizes;
+            int pageSize = 5;
+          
                 //{
             //    if (!changePages)
             //    {
