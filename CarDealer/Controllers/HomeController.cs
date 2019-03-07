@@ -29,17 +29,25 @@ namespace CarDealer.Controllers
         }
 
         public List<Car> page_cars;
-
-        public ActionResult Catalog(String manufacturer, String model, String type, String pageSizes, int page = 1)
+        public ActionResult Catalog(String manufacturerList, String model, String type, int pageSizes = 4, int page = 1)
         {
             CarContext db = new CarContext();
-            //List<Car> products = db.Cars.Where(e => e.manufacturer.Equals("BMW")).ToList();
-            //List<Car> cars = db.Cars.ToList();
             IQueryable<Car> cars = db.Cars;
 
             FilterCar filterCar = new FilterCar();
 
-            if (manufacturer != null || model != null || type != null) {
+            if (manufacturerList != "" && manufacturerList != null)
+                cars = cars.Where(e => e.manufacturer.Equals(manufacturerList));
+            if (model != "" && model != null)
+                cars = cars.Where(e => e.model.Equals(model));
+            if (type != "" && type != null)
+                cars = cars.Where(e => e.type.Equals(type));
+
+
+            /*
+            if ((manufacturer != "" && manufacturer != null)
+                ||( model != "" && model != null)
+                || (type != "" && type != null)) {
                 
                 filterCar.manufacturerCars = cars.Where(e => e.manufacturer.Equals(manufacturer)).ToList();
                  
@@ -97,14 +105,33 @@ namespace CarDealer.Controllers
                if(page_cars == null )
                     page_cars = cars.ToList();
             }
-            else
-                page_cars = cars.ToList();
+            else*/
 
-            int pageSize = 5; 
-            if (pageSizes != null)
-                pageSize = int.Parse(pageSizes);
+            page_cars = cars.ToList();
 
-           
+            int pageSize = 3;
+            if (pageSizes != 0)
+                pageSize = pageSizes;
+                //{
+            //    if (!changePages)
+            //    {
+            //        pageSize = pageSizes;
+            //        prevPages = pageSizes;
+            //        changePages = true;
+            //    }
+            //    else
+            //    {
+            //        if(prevPages != pageSizes)
+            //            if(pageSizes == 50)
+            //            {
+            //                pageSize = 5;
+            //                changePages = false;
+            //            }
+                        
+            //    }
+
+            //}
+
             IEnumerable<Car> carsPerPages = page_cars.Skip((page - 1) * pageSize).Take(pageSize);
             CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = page_cars.Count };
             CarIndexView ivm = new CarIndexView { PageInfo = pageInfo, Cars = carsPerPages };

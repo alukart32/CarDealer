@@ -10,25 +10,70 @@
 
 <form method="get">
     <div class="form-inline">
-        <label class="control-panel"> Фильтр авто </label>
-        <h5 class="header-3">Производитель</h5>
-        <p>
-            @Html.TextBox("manufacturer", "") </h3>
-            <h5 class="header-3">Модель</h5>
-        <p> @Html.TextBox("model", "") </p>
+        <label class="control-panel header-3">
+            Фильтр авто
+        </label>
 
-        <h5 class="header-3">Тип</h5>
-        <p> @Html.TextBox("type", "") </p>
-        <input type="submit" value="Получить">
+        <div class="row">
+            <div class="col-md-2">
+                <h5 class="header-3">Производитель</h5>
+                    <input list="manufacturerList" name="manufacturerList" autofocus>
+                    <datalist id="manufacturerList">
+                        <option value="BMW">
+                        <option value="Audi">
+                        <option value="Fiat">
+                        <option value="Opel">
+                        <option value="Skoda">
+                        <option value="Volkswagen">
+                        <option value="Volvo">
+                    </datalist>
+            </div>
+            
+            <div class="col-md-2">
+                <h5 class="header-3">Модель</h5>
+                @Html.TextBox("model", "")
+            </div>
+            
+            <div class="col-md-2">
+                <h5 class="header-3">Тип</h5>
+                <p> @Html.TextBox("type", "") </p>
+            </div>
+        </div>
 
-        <h5 class="header-5">Pages</h5>
-        <p> @Html.TextBox("pageSizes", "") </p>
-        <input type="submit" value="Получить" class="col-md-1">
+        <div class="row">
+            <div class="col-md-1">
+                <p>3</p>
+                <input type="radio" name="pageSizes" value="3">
+            </div>
+            <div class="col-md-1">
+                <p>5</p>
+                <input type="radio" name="pageSizes" value="5">
+            </div>
+            <div class="col-md-1">
+                <p>8</p>
+                <input type="radio" name="pageSizes" value="8">
+            </div>
+            <div class="col-md-1">
+                <p>all</p>
+                <input type="radio" name="pageSizes" value="50">
+            </div>
+        </div>
 
+        <!--<input type="range" name="pageSizes" min="3" max="50"/>-->
+        <br />
+
+        <div class="row">
+            <div class="col-md-1">
+                <input type="submit" value="Получить">
+            </div>
+            <div class="col-md-1">
+                <input type="reset" value="Отчистить">
+            </div>
+        </div>
     </div>
 </form>
 
-</br>
+<br/>
 
 <table class="table">
     <tr>
@@ -71,7 +116,7 @@
         </tr>
     }
 </table>
-</br>
+<br/>
 
 <div class="btn-group">
     @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))

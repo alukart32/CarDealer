@@ -165,6 +165,7 @@
     <Compile Include="Models\Domain\Customer.cs" />
     <Compile Include="Models\Domain\Order.cs" />
     <Compile Include="Models\Domain\OrderDetail.cs" />
+    <Compile Include="Models\Paging\CarChangePages.cs" />
     <Compile Include="Models\Paging\CarIndexView.cs" />
     <Compile Include="Models\Paging\CarPageInfo.cs" />
     <Compile Include="Models\Paging\PagingHelpers.cs" />
