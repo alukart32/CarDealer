@@ -8,15 +8,15 @@
 <h2>Catalog</h2>
 
 
+<label class="control-panel header-3">
+    Фильтр авто
+</label>
+
 <form method="get">
     <div class="form-inline">
-        <label class="control-panel header-3">
-            Фильтр авто
-        </label>
-
         <div class="row">
             <div class="col-md-2">
-                <h5 class="header-3">Производитель</h5>
+                <h5 class="header-3" style="text-align:center"><strong>Производитель</strong></h5>
                 <input list="manufacturerList" name="manufacturerList" autofocus>
                 <datalist id="manufacturerList">
                     <option value="BMW">
@@ -30,47 +30,56 @@
             </div>
 
             <div class="col-md-2">
-                <h5 class="header-3">Модель</h5>
+                <h5 class="header-3" style="text-align:center"><strong>Модель</strong></h5>
                 @Html.TextBox("model", "")
             </div>
 
             <div class="col-md-2">
-                <h5 class="header-3">Тип</h5>
+                <h5 class="header-3" style="text-align:center"><strong>Тип</strong></h5>
                 <p> @Html.TextBox("type", "") </p>
             </div>
 
-            <div class="col-md-2">
-                <h5 class="header-3">Сравнить как</h5>
-                <input list="relationList" name="relationList">
-                <datalist id="relationList">
-                    <option value="<">
-                    <option value="<=">
-                    <option value=">">
-                    <option value=">=">
-                    <option value="=">
-                </datalist>
+            <div class="col-md-2 col-md-push-2">
+                <h5 class="header-3">Критерий</h5>
+                <select name="relationList">
+                    <option value="<"><</option>
+                    <option value="<="><=</option>
+                    <option value=">">></option>
+                    <option value=">=">>=</option>
+                    <option value=""selected></option>
+                </select>
             </div>
 
-            <div class="col-md-2">
-                <h5 class="header-3">Цена</h5>
-                <p> @Html.TextBox("price", 1) </p>
+            <div class="col-md-2 col-md-offset-1">
+                <h5 class="header-3" style="text-align:center"><strong>Цена</strong></h5>
+                <p> @Html.TextBox("price", "") </p>
             </div>
-
         </div>
-   
+
         <br />
-        
+
         <div class="row">
             <div class="col-md-1">
                 <input type="submit" value="Получить">
             </div>
             <div class="col-md-1">
-                <input type="reset" value="Обнулить">
+                <input type="reset" value="Все авто" />
             </div>
         </div>
     </div>
 </form>
 
+<br />
+
+<!--
+<form action="/Home/Catalog">
+    <div class="row">
+        <div class="col-md-1">
+            <input type="submit" value="Все авто">
+        </div>
+    </div>
+</form>
+-->
 <br />
 
 <!-- Потом, если захочу
@@ -123,23 +132,26 @@
 
     @foreach (var item in Model.Cars)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.manufacturer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.manufacturer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.price)
+        </td>
+        <td>
+            <p><a href="/Home/AddToCart/@item.car_id">В корзину</a></p>
+        </td>
+    </tr>
     }
 </table>
 <br />
@@ -148,4 +160,5 @@
     @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))
 </div>
 
+<p><a href="/Home/CartBrowse">Просмотр корзины</a></p>
 

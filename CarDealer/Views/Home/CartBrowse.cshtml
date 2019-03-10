@@ -1,0 +1,43 @@
+﻿@using CarDealer.Models.Purchase
+@model IEnumerable<ShopBasketPos>
+
+@{
+    ViewBag.Title = "CartBrowse";
+}
+<h2>Просмотр корзины</h2>
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Товар
+        </th>
+        <th>
+            Цена
+        </th>
+        <th>
+            Количество
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProdID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProdName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+        </tr>
+    }
+</table>
+
+<p><a href="/Home/Buy">Оформить заказ</a></p>

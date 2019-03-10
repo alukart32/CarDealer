@@ -43,117 +43,38 @@ namespace CarDealer.Controllers
             if (type != "" && type != null)
                 cars = cars.Where(e => e.type.Equals(type));
 
-            if(price != "" && price != null)
+            if (price != "" && price != null)
             {
                 decimal d = decimal.Parse(price);
 
-                switch (relationList)
+                if (relationList == "" && d > 0)
                 {
-                    case "<":
-                        cars = cars.Where(e => e.price < d);
-                        break;
-                    case "<=":
-                        cars = cars.Where(e => e.price <= d);
-                        break;
-                    case ">":
-                        cars = cars.Where(e => e.price > d);
-                        break;
-                    case ">=":
-                        cars = cars.Where(e => e.price >= d);
-                        break;
-                    case "=":
-                        cars = cars.Where(e => e.price == d);
-                        break;
-                }
-            }
-
-            /*
-            if ((manufacturer != "" && manufacturer != null)
-                ||( model != "" && model != null)
-                || (type != "" && type != null)) {
-                
-                filterCar.manufacturerCars = cars.Where(e => e.manufacturer.Equals(manufacturer)).ToList();
-                 
-                filterCar.modelCars = cars.Where(e => e.model.Equals(model)).ToList();
-
-                filterCar.typeCars = cars.Where(e => e.type.Equals(type)).ToList();
-
-                List<Car> filteredCars = null;
-
-                // есть 3 критерия
-                if (filterCar.manufacturerCars.Capacity != 0 && filterCar.modelCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
-                {
-                    filteredCars = filterCar.manufacturerCars;
-                    filteredCars = filteredCars.Intersect(filterCar.modelCars).ToList();
-                    filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
+                    cars = cars.Where(e => e.price == d);
                 }
                 else
-                {
-                    // каких-то 2 критерия
-                    if(filterCar.manufacturerCars.Capacity != 0 && filterCar.modelCars.Capacity != 0)
+                    switch (relationList)
                     {
-                        filteredCars = filterCar.manufacturerCars;
-                        filteredCars = filteredCars.Intersect(filterCar.modelCars).ToList();
+                        case "<":
+                            cars = cars.Where(e => e.price < d);
+                            break;
+                        case "<=":
+                            cars = cars.Where(e => e.price <= d);
+                            break;
+                        case ">":
+                            cars = cars.Where(e => e.price > d);
+                            break;
+                        case ">=":
+                            cars = cars.Where(e => e.price >= d);
+                            break;
+                        case "=":
+                            cars = cars.Where(e => e.price == d);
+                            break;
                     }
-                    else
-                    {
-                        if(filterCar.manufacturerCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
-                        {
-                            filteredCars = filterCar.manufacturerCars;
-                            filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
-                        }
-                        else
-                        {
-                            if(filterCar.modelCars.Capacity != 0 && filterCar.typeCars.Capacity != 0)
-                            {
-                                filteredCars = filterCar.modelCars;
-                                filteredCars = filteredCars.Intersect(filterCar.typeCars).ToList();
-                            }
-                            else
-                            {
-                                // один критерий
-                                if (filterCar.manufacturerCars.Capacity != 0)
-                                    filteredCars = filterCar.manufacturerCars;
-                                if(filterCar.modelCars.Capacity != 0)
-                                    filteredCars = filterCar.modelCars;
-                                if (filterCar.typeCars.Capacity != 0)
-                                    filteredCars = filterCar.typeCars;
-                            }
-                        }
-                    }
-                }
-                
-               page_cars = filteredCars;
-
-               if(page_cars == null )
-                    page_cars = cars.ToList();
             }
-            else*/
-
             page_cars = cars.ToList();
 
             int pageSize = 5;
-          
-                //{
-            //    if (!changePages)
-            //    {
-            //        pageSize = pageSizes;
-            //        prevPages = pageSizes;
-            //        changePages = true;
-            //    }
-            //    else
-            //    {
-            //        if(prevPages != pageSizes)
-            //            if(pageSizes == 50)
-            //            {
-            //                pageSize = 5;
-            //                changePages = false;
-            //            }
-                        
-            //    }
-
-            //}
-
+            
             IEnumerable<Car> carsPerPages = page_cars.Skip((page - 1) * pageSize).Take(pageSize);
             CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = page_cars.Count };
             CarIndexView ivm = new CarIndexView { PageInfo = pageInfo, Cars = carsPerPages };
@@ -177,13 +98,13 @@ namespace CarDealer.Controllers
             ShopBasket myCart = ShopBasket.GetCart(Session["MyCart"]);
             if (ID != null)
             {
-               // myCart.AddItem((int)ID, car.ProdName, car.price, 1);
+                 myCart.AddItem((int)ID, car.manufacturer, car.price, 1);
                 // Запись корзины в сессию
                 Session["MyCart"] = myCart;
             }
-            return Redirect("/Home/Catalog");
+            return Redirect("/Home/CartBrowse");
         }
-        
+
         public ActionResult CartBrowse()
         {
             // Чтение корзины из сессии
@@ -191,6 +112,7 @@ namespace CarDealer.Controllers
             List<ShopBasketPos> lines = (List<ShopBasketPos>)myCart.Lines;
             return View(lines);
         }
+
         [HttpGet]
         public ActionResult Buy()
         {
