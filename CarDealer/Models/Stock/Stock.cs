@@ -22,7 +22,8 @@ namespace CarDealer.Models.Stock
             {
                 firstName = fn,
                 lastName = ln,
-                email = mail
+                email = mail,
+                customer_id = db.Customers.Count()
             };
             db.Customers.Add(c);
             db.SaveChanges();
@@ -33,6 +34,7 @@ namespace CarDealer.Models.Stock
         {
             // Создаем и инициализируем новый заказ
             Order order = new Order();
+            order.order_id = db.Orders.Count();
             order.date = DateTime.Today; // Текущая дата
             order.customer = CustID; // Ид-р заказчика
             db.Orders.Add(order); // Добавляем заказ в сущность
@@ -41,7 +43,7 @@ namespace CarDealer.Models.Stock
             {
                 // Создаем и инициализируем новую позицию в заказе
                 OrderDetail oderDetail = new OrderDetail();
-                // od.OrdID = o.OrdID;
+                oderDetail.order_id = order.order_id;
                 oderDetail.car_id = line.ProdID;
                 oderDetail.amount = line.Quantity;
                 // Через навигационное свойство добавляем позицию в заказ

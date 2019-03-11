@@ -1,5 +1,4 @@
-﻿using CarDealer.Filter;
-using CarDealer.Models.Domain;
+﻿using CarDealer.Models.Domain;
 using CarDealer.Models.Paging;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
@@ -34,8 +33,6 @@ namespace CarDealer.Controllers
             CarContext db = new CarContext();
             IQueryable<Car> cars = db.Cars;
 
-            FilterCar filterCar = new FilterCar();
-
             if (manufacturerList != "" && manufacturerList != null)
                 cars = cars.Where(e => e.manufacturer.Equals(manufacturerList));
             if (model != "" && model != null)
@@ -45,13 +42,11 @@ namespace CarDealer.Controllers
 
             if (price != "" && price != null)
             {
-                decimal d = decimal.Parse(price);
-
-                if (relationList == "" && d > 0)
+                
+                if (relationList != "")
                 {
-                    cars = cars.Where(e => e.price == d);
-                }
-                else
+                    decimal d = decimal.Parse(price);
+
                     switch (relationList)
                     {
                         case "<":
@@ -70,6 +65,7 @@ namespace CarDealer.Controllers
                             cars = cars.Where(e => e.price == d);
                             break;
                     }
+                }
             }
             page_cars = cars.ToList();
 
@@ -85,7 +81,7 @@ namespace CarDealer.Controllers
         {
             ViewBag.Message = "Статус заказа: " + msg;
             ViewBag.OrdID = "Номер заказа: " + ID.ToString();
-            ViewBag.Address = "Адрес доставки: " + mail;
+            ViewBag.Mail = "E-mal: " + mail;
 
             return View();
         }
@@ -102,7 +98,7 @@ namespace CarDealer.Controllers
                 // Запись корзины в сессию
                 Session["MyCart"] = myCart;
             }
-            return Redirect("/Home/CartBrowse");
+            return Redirect("/Home/Catalog");
         }
 
         public ActionResult CartBrowse()
@@ -119,11 +115,11 @@ namespace CarDealer.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Buy(string FirstName, string LastName, string Address)
+        public ActionResult Buy(string FirstName, string LastName, string Email)
         {
             Stock sdb = new Stock();
             // Добавляем заказчика
-            Customer c = sdb.AddCustomer(FirstName, LastName, Address);
+            Customer c = sdb.AddCustomer(FirstName, LastName, Email);
             // Читаем корзину из сессии
             ShopBasket myCart = ShopBasket.GetCart(Session["MyCart"]);
             // Пытаемся оформить заказ

@@ -46,7 +46,8 @@
                     <option value="<="><=</option>
                     <option value=">">></option>
                     <option value=">=">>=</option>
-                    <option value=""selected></option>
+                    <option value="=">=</option>
+                    <option value="" selected></option>
                 </select>
             </div>
 
@@ -62,24 +63,22 @@
             <div class="col-md-1">
                 <input type="submit" value="Получить">
             </div>
-            <div class="col-md-1">
-                <input type="reset" value="Все авто" />
-            </div>
         </div>
     </div>
 </form>
 
 <br />
 
-<!--
-<form action="/Home/Catalog">
-    <div class="row">
-        <div class="col-md-1">
-            <input type="submit" value="Все авто">
-        </div>
-    </div>
-</form>
--->
+<div class="row">
+    <form action="/Home/Catalog" class="col-md-2">
+        <button type="submit">Все авто</button>
+    </form>
+
+    <form action="/Home/CartBrowse" class="=col-md-2">
+        <button type="submit">Просмотр корзины</button>
+    </form>
+</div>
+
 <br />
 
 <!-- Потом, если захочу
@@ -132,26 +131,26 @@
 
     @foreach (var item in Model.Cars)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.manufacturer)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.country)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.price)
-        </td>
-        <td>
-            <p><a href="/Home/AddToCart/@item.car_id">В корзину</a></p>
-        </td>
-    </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.manufacturer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                <p><a href="/Home/AddToCart/@item.car_id">В корзину</a></p>
+            </td>
+        </tr>
     }
 </table>
 <br />
@@ -159,6 +158,3 @@
 <div class="btn-group">
     @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))
 </div>
-
-<p><a href="/Home/CartBrowse">Просмотр корзины</a></p>
-

@@ -46,10 +46,15 @@
         </div>
     </div>
 }
-<div>
-    @Html.ActionLink("К корзине", "CartBrowse")
-</div>
 
-<div>
-    @Html.ActionLink("К каталогу", "Catalog")
-</div>
+    <div class="row">
+        <form action="/Home/CartBrowse"  class="col-md-2">
+            <button type="submit">К корзине</button>
+        </form>
+
+        <form action="/Home/Catalog"  class="col-md-2">
+            <button type="submit">К каталогу</button>
+        </form>
+    </div>
+
+
