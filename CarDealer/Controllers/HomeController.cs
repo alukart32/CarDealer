@@ -1,4 +1,5 @@
-﻿using CarDealer.Models.Domain;
+﻿using CarDealer.Filter;
+using CarDealer.Models.Domain;
 using CarDealer.Models.Paging;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
@@ -27,25 +28,35 @@ namespace CarDealer.Controllers
             return View();
         }
 
-        public List<Car> page_cars;
-        public ActionResult Catalog(String manufacturerList, String model, String type, String price, String relationList, int page = 1)
+        public ActionResult Catalog(String manufacturerList, String relationList, CarFilter carFilter = null,PriceFilter priceFilter = null, bool restoreFilter = false, int page = 1)
         {
             CarContext db = new CarContext();
             IQueryable<Car> cars = db.Cars;
 
+            if (carFilter == null)
+                carFilter = new CarFilter();
+            if (priceFilter == null)
+                priceFilter = new PriceFilter();
+
+            if (restoreFilter) // если необходимо восстановить данные, то восстанавливаем из сессии
+            {
+                carFilter = CarFilter.GetCarFilter(Session["CarFilter"]);
+                priceFilter = PriceFilter.GetPriceFilter(Session["PriceFilter"]);
+            }
+
             if (manufacturerList != "" && manufacturerList != null)
                 cars = cars.Where(e => e.manufacturer.Equals(manufacturerList));
-            if (model != "" && model != null)
-                cars = cars.Where(e => e.model.Equals(model));
-            if (type != "" && type != null)
-                cars = cars.Where(e => e.type.Equals(type));
+            if (carFilter.model != "" && carFilter.model != null)
+                cars = cars.Where(e => e.model.Equals(carFilter.model));
+            if (carFilter.type != "" && carFilter.type != null)
+                cars = cars.Where(e => e.type.Equals(carFilter.type));
 
-            if (price != "" && price != null)
+            if (priceFilter.price > 0)
             {
                 
                 if (relationList != "")
                 {
-                    decimal d = decimal.Parse(price);
+                    decimal d = priceFilter.price;
 
                     switch (relationList)
                     {
@@ -67,13 +78,19 @@ namespace CarDealer.Controllers
                     }
                 }
             }
-            page_cars = cars.ToList();
 
             int pageSize = 5;
-            
-            IEnumerable<Car> carsPerPages = page_cars.Skip((page - 1) * pageSize).Take(pageSize);
-            CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = page_cars.Count };
+                
+            IEnumerable<Car> carsPerPages = cars.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+            CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = cars.ToList().Count };
             CarIndexView ivm = new CarIndexView { PageInfo = pageInfo, Cars = carsPerPages };
+
+            // сейвим текущий фильтр в сессию
+            Session["CarFilter"] = carFilter; 
+            ivm.carFilter = carFilter;
+
+            Session["PriceFilter"] = priceFilter;
+            ivm.priceFilter = priceFilter;
             return View(ivm);
         }
 
@@ -98,7 +115,7 @@ namespace CarDealer.Controllers
                 // Запись корзины в сессию
                 Session["MyCart"] = myCart;
             }
-            return Redirect("/Home/Catalog");
+            return Redirect("/Home/Catalog/?restoreFilter=true");
         }
 
         public ActionResult CartBrowse()

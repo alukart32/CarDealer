@@ -1,4 +1,5 @@
-﻿using CarDealer.Models.Domain;
+﻿using CarDealer.Filter;
+using CarDealer.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,8 @@ namespace CarDealer.Models.Paging
     {
         public IEnumerable<Car> Cars { get; set; }
         public CarPageInfo PageInfo { get; set; }
+        public CarFilter carFilter { get; set; }
+        public PriceFilter priceFilter { get; set; }
+        public PageFilter pageFilter { get; set; }
     }
 }

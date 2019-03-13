@@ -30,13 +30,33 @@
             </div>
 
             <div class="col-md-2">
+                @{ 
+                    var model = Model.carFilter.model;
+                    string m = "";
+                }
+
+                @if (model != "")
+                {
+                    m = model;
+                }
+
                 <h5 class="header-3" style="text-align:center"><strong>Модель</strong></h5>
-                @Html.TextBox("model", "")
+                @Html.TextBox("model", m)
             </div>
 
             <div class="col-md-2">
+                @{
+                    var type = Model.carFilter.type;
+                    string t = "";
+                }
+
+                @if (type != "")
+                {
+                    t = type;
+                }
+
                 <h5 class="header-3" style="text-align:center"><strong>Тип</strong></h5>
-                <p> @Html.TextBox("type", "") </p>
+                <p> @Html.TextBox("type", t) </p>
             </div>
 
             <div class="col-md-2 col-md-push-2">
@@ -52,8 +72,18 @@
             </div>
 
             <div class="col-md-2 col-md-offset-1">
+                @{
+                    var price = Model.priceFilter.price;
+                    decimal d = 0;
+                }
+
+                @if (price > 0)
+                {
+                    d = price;
+                }
+
                 <h5 class="header-3" style="text-align:center"><strong>Цена</strong></h5>
-                <p> @Html.TextBox("price", "") </p>
+                <p> @Html.TextBox("price", d) </p>
             </div>
         </div>
 
