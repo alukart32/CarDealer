@@ -28,21 +28,17 @@ namespace CarDealer.Controllers
             return View();
         }
 
-        public ActionResult Catalog(String manufacturerList, String relationList, CarFilter carFilter = null,PriceFilter priceFilter = null, bool restoreFilter = false, int page = 1)
+        public ActionResult Catalog(String manufacturerList, String relationList, CarFilter carFilter = null, bool restore = false, int page = 1)
         {
             CarContext db = new CarContext();
             IQueryable<Car> cars = db.Cars;
 
             if (carFilter == null)
                 carFilter = new CarFilter();
-            if (priceFilter == null)
-                priceFilter = new PriceFilter();
-
-            if (restoreFilter) // если необходимо восстановить данные, то восстанавливаем из сессии
-            {
+            
+            if (restore) // если необходимо восстановить данные, то восстанавливаем из сессии
                 carFilter = CarFilter.GetCarFilter(Session["CarFilter"]);
-                priceFilter = PriceFilter.GetPriceFilter(Session["PriceFilter"]);
-            }
+            
 
             if (manufacturerList != "" && manufacturerList != null)
                 cars = cars.Where(e => e.manufacturer.Equals(manufacturerList));
@@ -51,12 +47,12 @@ namespace CarDealer.Controllers
             if (carFilter.type != "" && carFilter.type != null)
                 cars = cars.Where(e => e.type.Equals(carFilter.type));
 
-            if (priceFilter.price > 0)
+            if (carFilter.price > 0)
             {
                 
                 if (relationList != "")
                 {
-                    decimal d = priceFilter.price;
+                    decimal d = carFilter.price;
 
                     switch (relationList)
                     {
@@ -88,9 +84,7 @@ namespace CarDealer.Controllers
             // сейвим текущий фильтр в сессию
             Session["CarFilter"] = carFilter; 
             ivm.carFilter = carFilter;
-
-            Session["PriceFilter"] = priceFilter;
-            ivm.priceFilter = priceFilter;
+            
             return View(ivm);
         }
 
@@ -149,6 +143,14 @@ namespace CarDealer.Controllers
             // переходим на страницу со статусом
             return RedirectToAction("OrderStatus", "Home",
             new { ID = id, msg = message, mail = c.email });
+        }
+        public ActionResult DeleteFromCart(int prodID)
+        {
+            ShopBasket basket = ShopBasket.GetCart(Session["MyCart"]);
+            basket.RemoveLine(prodID);
+            Session["MyCart"] = basket;
+
+            return Redirect("/Home/CartBrowse");
         }
     }
 }

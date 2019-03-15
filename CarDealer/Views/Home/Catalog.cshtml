@@ -73,11 +73,11 @@
 
             <div class="col-md-2 col-md-offset-1">
                 @{
-                    var price = Model.priceFilter.price;
+                    var price = Model.carFilter.price;
                     decimal d = 0;
                 }
 
-                @if (price > 0)
+                @if (price >= 0)
                 {
                     d = price;
                 }
@@ -93,53 +93,20 @@
             <div class="col-md-1">
                 <input type="submit" value="Получить">
             </div>
+
+            <form action="/Home/Catalog" class="col-md-2">
+                <button type="submit">Все авто</button>
+            </form>
+
         </div>
     </div>
 </form>
 
 <br />
 
-<div class="row">
-    <form action="/Home/Catalog" class="col-md-2">
-        <button type="submit">Все авто</button>
-    </form>
-
-    <form action="/Home/CartBrowse" class="=col-md-2">
-        <button type="submit">Просмотр корзины</button>
-    </form>
-</div>
-
 <br />
 
-<!-- Потом, если захочу
-<form>
-    <div class="row">
-        <div class="col-md-push-3">
-            <div class="btn-group">
-                <div class="col-md-1">
-                    <input type="checkbox" name="pageSizes" value="3">3
-                </div>
-                <div class="col-md-1">
-                    <input type="hidden" name="pageSizes" value="5" />
-                    <input type="checkbox" name="pageSizes" value="5">5
-                </div>
-                <div class="col-md-1">
-                    <input type="checkbox" name="pageSizes" value="8">8
-                </div>
-                <div class="col-md-1">
-                    <input type="checkbox" name="pageSizes" value="50">all
-                </div>
-                <div class="col-md-1">
-                    <input type="submit" value="Refresh Pages" />
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
--->
-<br />
-
-<table class="table">
+<table class="table" >
     <tr>
         <th class="header-3">
             Manufacturer
@@ -154,7 +121,7 @@
             Model
         </th>
         <th class="header-3">
-            Price
+            Price $$
         </th>
         <th></th>
     </tr>
@@ -186,5 +153,5 @@
 <br />
 
 <div class="btn-group">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x }))
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Catalog", new { page = x, restore = true }))
 </div>

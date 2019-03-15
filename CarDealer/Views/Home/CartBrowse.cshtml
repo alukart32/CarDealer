@@ -4,41 +4,73 @@
 @{
     ViewBag.Title = "CartBrowse";
 }
-<h2>Просмотр корзины</h2>
-<table class="table">
-    <tr>
-        <th>
-            ID
-        </th>
-        <th>
-            Товар
-        </th>
-        <th>
-            Цена
-        </th>
-        <th>
-            Количество
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model)
-    {
+
+@{
+    decimal totalPrice = 0;
+}
+
+<h2>Корзина</h2>
+
+@if (Model.Count() != 0)
+{
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
+            <th>
+                ID
+            </th>
+            <th>
+                Товар
+            </th>
+            <th>
+                Цена $$
+            </th>
+            <th>
+                Количество
+            </th>
+            <th></th>
         </tr>
-    }
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProdID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProdName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.ActionLink("+", "Edit", new { id = item.ProdID }) |
+                    @Html.ActionLink("-", "Edit", new { id = item.ProdID }) |
+                    <!-- @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) | -->
+                    @Html.ActionLink("Delete", "DeleteFromCart", new { prodID = item.ProdID })
+                </td>
+                @{
+                    totalPrice += item.Price * item.Quantity;
+                }
+            </tr>
+         }
+    </table>
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-8">
+            <h3>Сумма к оплате: <b>@Html.DisplayName(((double)totalPrice).ToString()) </b>$$</h3>
+       </div>
+    </div>
+   
+}
+else
+{
+    <div class="text-center">
+        <br />
+        <h1 class="header-1"> Корзина пуста </h1>
+    </div>
+}
 
 <div class="row">
     <form action="/Home/Buy" class="col-md-2">

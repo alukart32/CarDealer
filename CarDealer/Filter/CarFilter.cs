@@ -11,10 +11,16 @@ namespace CarDealer.Filter
         public String type { get; set; }
         public int rest { get; set; }
 
+        public decimal price { get; set; }
+
+        public String manufacturer { get; set; }
+
         public CarFilter()
         {
             model = null;
             type = null;
+            manufacturer = null;
+            price = 0;
             rest = -1;
         }
 
