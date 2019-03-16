@@ -45,8 +45,8 @@
                     @Html.DisplayFor(modelItem => item.Quantity)
                 </td>
                 <td>
-                    @Html.ActionLink("+", "Edit", new { id = item.ProdID }) |
-                    @Html.ActionLink("-", "Edit", new { id = item.ProdID }) |
+                    @Html.ActionLink("+", "ChangeQuantity", new { prodID = item.ProdID, add = true }) |
+                    @Html.ActionLink("-", "ChangeQuantity", new { prodID = item.ProdID, add = false }) |
                     <!-- @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) | -->
                     @Html.ActionLink("Delete", "DeleteFromCart", new { prodID = item.ProdID })
                 </td>

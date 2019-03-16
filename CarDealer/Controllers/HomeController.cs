@@ -152,5 +152,15 @@ namespace CarDealer.Controllers
 
             return Redirect("/Home/CartBrowse");
         }
+
+        public ActionResult ChangeQuantity(int prodID, bool add)
+        {
+            ShopBasket basket = ShopBasket.GetCart(Session["MyCart"]);
+            basket.changeQuantity(prodID,add);
+            Session["MyCart"] = basket;
+
+            return Redirect("/Home/CartBrowse");
+        }
+
     }
 }

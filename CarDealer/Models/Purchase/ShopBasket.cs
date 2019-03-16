@@ -34,6 +34,20 @@ namespace CarDealer.Models.Purchase
                 line.Quantity += quantity;
             }
         }
+        public void changeQuantity(int prodID, bool add)
+        {
+            ShopBasketPos line = lineCollection.Where(p => p.ProdID == prodID).FirstOrDefault();
+            if (add)
+                line.Quantity++;
+            else
+            {
+                if (line.Quantity - 1 == 0)
+                    RemoveLine(prodID);
+                else
+                    line.Quantity--;
+            }
+        }
+
         // Удаление из корзины
         public void RemoveLine(int prodID)
         {
