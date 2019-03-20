@@ -3,6 +3,7 @@ using CarDealer.Models.Domain;
 using CarDealer.Models.Paging;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
+using CarDealer.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
