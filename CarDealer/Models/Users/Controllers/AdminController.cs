@@ -15,6 +15,7 @@ namespace CarDealer.Models.Users.Controllers
     {
         public ActionResult Index()
         {
+            InitUsers();
             return View(UserManager.Users);
         }
 
@@ -23,25 +24,20 @@ namespace CarDealer.Models.Users.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Create(CreateModel model)
+        //[HttpPost]
+        //public async Task<ActionResult> Create(CreateModel model)
+        private void Create(String name, String email, String psswrd)
         {
-            if (ModelState.IsValid)
-            {
-                AppUser user = new AppUser { UserName = model.Name, Email = model.Email };
-                IdentityResult result =
-                    await UserManager.CreateAsync(user, model.Password);
+          AppUser user = new AppUser { UserName = name, Email = email };
+          UserManager.Create(user, psswrd);  
+        }
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    AddErrorsFromResult(result);
-                }
-            }
-            return View(model);
+        private void InitUsers()
+        {
+            // создание admin
+            Create("admin", "admin@gmail.com", "groot");
+            // пользователь
+            //Create("user", "user@gmail.com", "user_groot");
         }
 
         private void AddErrorsFromResult(IdentityResult result)
