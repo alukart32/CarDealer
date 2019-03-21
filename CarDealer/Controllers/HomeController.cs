@@ -17,9 +17,6 @@ namespace CarDealer.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("Ключ", "Значение");
-
             return View();
         }
 
@@ -133,21 +130,25 @@ namespace CarDealer.Controllers
         [HttpPost]
         public ActionResult Buy(string FirstName, string LastName, string Email)
         {
+
             Stock sdb = new Stock();
-            // Добавляем заказчика
-            Customer c = sdb.AddCustomer(FirstName, LastName, Email);
+            // Ищем существующего заказчика
+            Customer cust = sdb.FindCustomer(FirstName, LastName, Email);
+            if (cust == null) // либо создаем нового
+                cust = sdb.AddCustomer(FirstName, LastName, Email);
+ 
             // Читаем корзину из сессии
             ShopBasket myCart = ShopBasket.GetCart(Session["MyCart"]);
             // Пытаемся оформить заказ
             string message;
-            Order o = sdb.CommitTrans(c.customer_id, myCart, out message);
+            Order o = sdb.CommitTrans(cust.customer_id, myCart, out message);
             // В случае неудачи обнуляем номер
             int id = (o != null) ? o.order_id : 0;
             // В случае успеха очищаем сессию с корзиной
             Session["MyCart"] = (o != null) ? null : Session["MyCart"];
             // переходим на страницу со статусом
             return RedirectToAction("OrderStatus", "Home",
-            new { ID = id, msg = message, mail = c.email });
+            new { ID = id, msg = message, mail = cust.email });
         }
         public ActionResult DeleteFromCart(int prodID)
         {

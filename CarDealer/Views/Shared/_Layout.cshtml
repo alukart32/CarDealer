@@ -23,7 +23,7 @@
                     <li class="col-md-3">@Html.ActionLink("About", "About", "Home")</li>
                     <li class="col-md-3">@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li class="col-md-3">@Html.ActionLink("Catalog", "Catalog", "Home")</li>
-                    <li class="col-md-3 col-md-push-8 align-self-end">@Html.ActionLink("Basket", "CartBrowse", "Home")</li>
+                    <li class="col-md-3 col-md-push-12">@Html.ActionLink("Basket", "CartBrowse", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -32,9 +32,11 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        <!--
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>
+        -->
     </div>
 
     @Scripts.Render("~/bundles/jquery")

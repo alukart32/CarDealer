@@ -15,6 +15,16 @@ namespace CarDealer.Models.Stock
         {
             db = new CarContext();
         }
+        // Найти заказчика
+        public Customer FindCustomer(string fn, string ln, string em)
+        {
+            IQueryable<Customer> c = db.Customers.Where(p =>
+                    p.firstName == fn &&
+                    p.lastName == ln &&
+                    p.email == em 
+                );
+            return c.FirstOrDefault();
+        }
         // Добавление заказчика
         public Customer AddCustomer(string fn, string ln, string mail)
         {
