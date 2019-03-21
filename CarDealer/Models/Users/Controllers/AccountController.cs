@@ -52,6 +52,14 @@ namespace CarDealer.Models.Users.Controllers
             return View(details);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            AuthManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
         private IAuthenticationManager AuthManager
         {
             get

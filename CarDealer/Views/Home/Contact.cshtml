@@ -4,13 +4,30 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<address>
-    Университетская площадь 1<br />
-    Воронеж, Россия 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    XXX-XX-XX
-</address>
+<div class="row">
+    <div class="col-md-3" >
+        <address>
+            Университетская площадь 1<br />
+            Воронеж, Россия 98052-6399<br />
+            <abbr title="Phone">P:</abbr>
+            XXX-XX-XX
+        </address>
 
-<address>
-    <strong>Support:</strong>   <a href="http://www.amm.vsu.ru/">www.amm.vsu.ru</a><br />
-</address>
+        <address>
+            <strong>Support:</strong>   <a href="http://www.amm.vsu.ru/">www.amm.vsu.ru</a><br />
+        </address>
+    </div>
+    <div class="col-md-6" >
+        <div style="overflow:hidden;width: 350px; position: relative;">
+            <iframe width="350" height="350" src="https://maps.google.com/maps?width=250&amp;height=250&amp;hl=en&amp;q=Moscow%2C%20Voronezh%2C%20Universitetskaya%20Ploshchad%5C'%2C%201+(AMM%20Car%20Dealer)&amp;ie=UTF8&amp;t=&amp;z=15&amp;iwloc=B&amp;output=embed" frameborder="1" scrolling="no" marginheight="10" marginwidth="10"></iframe><div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;"><small style="line-height: 1.8;font-size: 2px;background: #fff;">Powered by <a href="https://embedgooglemaps.com/en/">https://embedgooglemaps.com/en/</a> & <a href="https://iamsterdamcard.it">i amsterdamcard it</a></small></div>
+            <style>
+                #gmap_canvas img {
+                    max-width: none !important;
+                    background: none !important
+                }
+            </style>
+        </div>
+    </div>
+</div>
+
+<br />

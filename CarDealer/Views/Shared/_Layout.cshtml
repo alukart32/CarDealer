@@ -23,8 +23,9 @@
                     <li class="col-md-3">@Html.ActionLink("About", "About", "Home")</li>
                     <li class="col-md-3">@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li class="col-md-3">@Html.ActionLink("Catalog", "Catalog", "Home")</li>
-                    <li class="col-md-3 col-md-push-12 align-self-end" >@Html.ActionLink("Basket", "CartBrowse", "Home")</li>
+                    <li class="col-md-3 col-md-push-8 align-self-end">@Html.ActionLink("Basket", "CartBrowse", "Home")</li>
                 </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
