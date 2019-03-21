@@ -42,7 +42,9 @@ namespace CarDealer.Models.Purchase
             else
             {
                 if (line.Quantity - 1 == 0)
-                    RemoveLine(prodID);
+                {
+                    //    RemoveLine(prodID);
+                }
                 else
                     line.Quantity--;
             }
