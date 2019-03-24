@@ -12,6 +12,7 @@ using CarDealer.Models.Users.Models;
 
 namespace CarDealer.Models.Users.Controllers
 {
+    [Authorize(Roles = "Administrators")]
     public class RoleAdminController : Controller
     {
         private AppUserManager UserManager
