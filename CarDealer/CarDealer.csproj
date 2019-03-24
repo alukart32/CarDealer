@@ -202,6 +202,10 @@
     <Compile Include="Models\Purchase\ShopBasketPos.cs" />
     <Compile Include="Models\Stock\Stock.cs" />
     <Compile Include="Models\Users\Controllers\AccountController.cs" />
+    <Compile Include="Models\Users\Controllers\RoleAdminController.cs" />
+    <Compile Include="Models\Users\Infrastructure\AppRoleManager.cs" />
+    <Compile Include="Models\Users\Infrastructure\IdentityHelpers.cs" />
+    <Compile Include="Models\Users\Models\AppRole.cs" />
     <Compile Include="Models\Users\Models\AppUser.cs" />
     <Compile Include="Models\Users\AppUserManager.cs" />
     <Compile Include="Models\Users\Controllers\AdminController.cs" />
@@ -216,7 +220,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="dump.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,6 +263,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\RoleAdmin\Index.cshtml" />
+    <Content Include="Views\RoleAdmin\Create.cshtml" />
+    <Content Include="Views\RoleAdmin\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

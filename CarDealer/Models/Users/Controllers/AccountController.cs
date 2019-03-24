@@ -20,6 +20,11 @@ namespace CarDealer.Models.Users.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return View("Error", new string[] { "В доступе отказано" });
+            }
+
             ViewBag.returnUrl = returnUrl;
             return View();
         }
@@ -54,9 +59,11 @@ namespace CarDealer.Models.Users.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult LogOff()
         {
-            AuthManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            // AuthManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
