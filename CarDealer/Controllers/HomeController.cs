@@ -4,6 +4,8 @@ using CarDealer.Models.Paging;
 using CarDealer.Models.Purchase;
 using CarDealer.Models.Stock;
 using CarDealer.Models.Users;
+using CarDealer.Models.Users.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,12 @@ namespace CarDealer.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "Administrators")]
+        public ActionResult AdminIndex()
+        {
+            return View("~/Views/TestAdmin/Index.cshtml");
+        }
+        
         public ActionResult About()
         {
             return View();
@@ -29,6 +36,68 @@ namespace CarDealer.Controllers
         public ActionResult Contact()
         {
             return View();
+        }
+
+
+        [Authorize(Roles = "Administrators")]
+        public ActionResult AdminCatalog(String manufacturerList, String relationList, CarFilter carFilter = null, bool restore = false, int page = 1)
+        {
+            CarContext db = new CarContext();
+            IQueryable<Car> cars = db.Cars;
+
+            if (carFilter == null)
+                carFilter = new CarFilter();
+
+            if (restore) // если необходимо восстановить данные, то восстанавливаем из сессии
+                carFilter = CarFilter.GetCarFilter(Session["CarFilter"]);
+            
+            
+            if (manufacturerList != "" && manufacturerList != null)
+                cars = cars.Where(e => e.manufacturer.Equals(manufacturerList));
+            if (carFilter.model != "" && carFilter.model != null)
+                cars = cars.Where(e => e.model.Equals(carFilter.model));
+            if (carFilter.type != "" && carFilter.type != null)
+                cars = cars.Where(e => e.type.Equals(carFilter.type));
+
+            if (carFilter.price > 0)
+            {
+                
+                if (relationList != "")
+                {
+                    decimal d = carFilter.price;
+
+                    switch (relationList)
+                    {
+                        case "<":
+                            cars = cars.Where(e => e.price < d);
+                            break;
+                        case "<=":
+                            cars = cars.Where(e => e.price <= d);
+                            break;
+                        case ">":
+                            cars = cars.Where(e => e.price > d);
+                            break;
+                        case ">=":
+                            cars = cars.Where(e => e.price >= d);
+                            break;
+                        case "=":
+                            cars = cars.Where(e => e.price == d);
+                            break;
+                    }
+                }
+            }
+
+            int pageSize = 5;
+
+            IEnumerable<Car> carsPerPages = cars.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+            CarPageInfo pageInfo = new CarPageInfo { PageNumber = page, PageSize = pageSize, TotalItems = cars.ToList().Count };
+            CarIndexView ivm = new CarIndexView { PageInfo = pageInfo, Cars = carsPerPages };
+
+            // сейвим текущий фильтр в сессию
+            Session["CarFilter"] = carFilter;
+            ivm.carFilter = carFilter;
+
+            return View(ivm);
         }
 
         public ActionResult Catalog(String manufacturerList, String relationList, CarFilter carFilter = null, bool restore = false, int page = 1)
@@ -169,5 +238,56 @@ namespace CarDealer.Controllers
             return Redirect("/Home/CartBrowse");
         }
 
+        [Authorize(Roles = "Administrators")]
+        public ActionResult EditEntryCarInDB(int prodID)
+        {
+            CarContext db = new CarContext();
+            Car c = db.Cars.Find(prodID);
+
+            if (c != null)
+            {
+                IQueryable<OrderDetail> orderDetails = db.OrderDetails;
+
+                foreach (OrderDetail o in orderDetails)
+                {
+                    if (o.car_id == prodID)
+                    {
+                        db.OrderDetails.Remove(o);
+                        db.SaveChanges();
+                    }
+                }
+
+                db.Cars.Remove(c);
+                db.SaveChanges();
+            }
+
+            return Redirect("AdminCatalog");
+        }
+
+        [Authorize(Roles = "Administrators")]
+        public ActionResult DeleteFromDB(int prodID)
+        {
+            CarContext db = new CarContext();
+            Car c = db.Cars.Find(prodID);
+
+            if (c != null)
+            {
+                IQueryable<OrderDetail> orderDetails = db.OrderDetails;
+
+                foreach (OrderDetail o in orderDetails)
+                {
+                    if(o.car_id == prodID)
+                    {
+                        db.OrderDetails.Remove(o);
+                        db.SaveChanges();
+                    }
+                }
+
+                db.Cars.Remove(c);
+                db.SaveChanges();
+            }
+
+            return Redirect("AdminCatalog");
+        }
     }
 }

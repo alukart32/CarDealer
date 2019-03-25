@@ -1,0 +1,153 @@
+﻿@model CarDealer.Models.Paging.CarIndexView
+@using CarDealer.Models.Paging
+
+@{
+    ViewBag.Title = "Catalog";
+}
+
+<h2>Catalog</h2>
+
+<form method="get">
+    <div class="form-inline">
+        <div class="row">
+            <div class="col-md-2">
+                <h5 class="header-3" style="text-align:center"><strong>Производитель</strong></h5>
+                <input list="manufacturerList" name="manufacturerList" autofocus>
+                <datalist id="manufacturerList">
+                    <option value="BMW">
+                    <option value="Audi">
+                    <option value="Fiat">
+                    <option value="Opel">
+                    <option value="Skoda">
+                    <option value="Volkswagen">
+                    <option value="Volvo">
+                </datalist>
+            </div>
+
+            <div class="col-md-2">
+                @{
+                    var model = Model.carFilter.model;
+                    string m = "";
+                }
+
+                @if (model != "")
+                {
+                    m = model;
+                }
+
+                <h5 class="header-3" style="text-align:center"><strong>Модель</strong></h5>
+                @Html.TextBox("model", m)
+            </div>
+
+            <div class="col-md-2">
+                @{
+                    var type = Model.carFilter.type;
+                    string t = "";
+                }
+
+                @if (type != "")
+                {
+                    t = type;
+                }
+
+                <h5 class="header-3" style="text-align:center"><strong>Тип</strong></h5>
+                <p> @Html.TextBox("type", t) </p>
+            </div>
+
+            <div class="col-md-2 col-md-push-2">
+                <h5 class="header-3">Критерий</h5>
+                <select name="relationList">
+                    <option value="<"><</option>
+                    <option value="<="><=</option>
+                    <option value=">">></option>
+                    <option value=">=">>=</option>
+                    <option value="=">=</option>
+                    <option value="" selected></option>
+                </select>
+            </div>
+
+            <div class="col-md-2 col-md-offset-1">
+                @{
+                    var price = Model.carFilter.price;
+                    decimal d = 0;
+                }
+
+                @if (price >= 0)
+                {
+                    d = price;
+                }
+
+                <h5 class="header-3" style="text-align:center"><strong>Цена</strong></h5>
+                <p> @Html.TextBox("price", d) </p>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-1">
+                <input type="submit" value="Получить">
+            </div>
+
+            <form action="/Home/Catalog" class="col-md-2">
+                <button type="submit">Все авто</button>
+            </form>
+
+        </div>
+    </div>
+</form>
+
+<br />
+
+<br />
+
+<table class="table">
+    <tr>
+        <th class="header-3">
+            Manufacturer
+        </th>
+        <th class="header-3">
+            Country
+        </th>
+        <th class="header-3">
+            Type
+        </th>
+        <th class="header-3">
+            Model
+        </th>
+        <th class="header-3">
+            Price $$
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Cars)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.manufacturer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { prodID = item.car_id }) |
+                @Html.ActionLink("Delete", "DeleteFromDB", new { prodID = item.car_id })
+            </td>
+        </tr>
+    }
+</table>
+<br />
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("AdminCatalog", new { page = x, restore = true }))
+</div>
