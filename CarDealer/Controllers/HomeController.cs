@@ -250,10 +250,10 @@ namespace CarDealer.Controllers
 
                 foreach (OrderDetail o in orderDetails)
                 {
+                    // нашли машину в заказе -> ! не удаляем
                     if (o.car_id == prodID)
                     {
-                        db.OrderDetails.Remove(o);
-                        db.SaveChanges();
+                        return Redirect("AdminCatalog");
                     }
                 }
 
