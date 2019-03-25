@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Catalog";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h2>Catalog</h2>
@@ -150,4 +151,13 @@
 
 <div class="btn-group">
     @Html.PageLinks(Model.PageInfo, x => Url.Action("AdminCatalog", new { page = x, restore = true }))
+</div>
+
+<br />
+<br />
+
+<div class="row">
+    <form action="/Admin/AddInDB" class="col-md-2">
+        <button type="submit">Add a car</button>
+    </form>
 </div>
