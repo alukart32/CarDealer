@@ -201,18 +201,18 @@
     <Compile Include="Models\Purchase\ShopBasket.cs" />
     <Compile Include="Models\Purchase\ShopBasketPos.cs" />
     <Compile Include="Models\Stock\Stock.cs" />
-    <Compile Include="Models\Users\Controllers\AccountController.cs" />
-    <Compile Include="Models\Users\Controllers\RoleAdminController.cs" />
-    <Compile Include="Models\Users\Infrastructure\AppRoleManager.cs" />
-    <Compile Include="Models\Users\Infrastructure\IdentityHelpers.cs" />
-    <Compile Include="Models\Users\Models\AppRole.cs" />
-    <Compile Include="Models\Users\Models\AppUser.cs" />
-    <Compile Include="Models\Users\AppUserManager.cs" />
-    <Compile Include="Models\Users\Controllers\AdminController.cs" />
-    <Compile Include="Models\Users\IdentityConfig.cs" />
-    <Compile Include="Models\Users\Infrastructure\AppIdentityDbContext.cs" />
-    <Compile Include="Models\Users\Models\CreateModel.cs" />
-    <Compile Include="Models\Users\Models\UserViewModels.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\RoleAdminController.cs" />
+    <Compile Include="Users\Infrastructure\AppRoleManager.cs" />
+    <Compile Include="Users\Infrastructure\IdentityHelpers.cs" />
+    <Compile Include="Users\Models\AppRole.cs" />
+    <Compile Include="Users\Models\AppUser.cs" />
+    <Compile Include="Users\AppUserManager.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Users\IdentityConfig.cs" />
+    <Compile Include="Users\Infrastructure\AppIdentityDbContext.cs" />
+    <Compile Include="Users\Models\CreateModel.cs" />
+    <Compile Include="Users\Models\UserViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

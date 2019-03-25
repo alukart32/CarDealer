@@ -216,7 +216,7 @@ namespace CarDealer.Models.Users.Controllers
             {             
                 CarContext db = new CarContext();
 
-                int nextId = db.Cars.Count();
+                int nextId = db.Cars.Count()+1;
 
                 Car car = db.Cars.Find(nextId);
                 while(car != null)
