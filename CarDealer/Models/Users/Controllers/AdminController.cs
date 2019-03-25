@@ -213,8 +213,17 @@ namespace CarDealer.Models.Users.Controllers
                
             }
             else
-            {
+            {             
                 CarContext db = new CarContext();
+
+                int nextId = db.Cars.Count();
+
+                Car car = db.Cars.Find(nextId);
+                while(car != null)
+                {
+                    nextId++;
+                    car = db.Cars.Find(nextId);
+                }
 
                 Car c = new Car
                 {
@@ -223,7 +232,7 @@ namespace CarDealer.Models.Users.Controllers
                     type = type,
                     price = price,
                     country = country,
-                    car_id = db.Cars.Count()+1
+                    car_id = nextId
                 };
 
                 db.Cars.Add(c);
