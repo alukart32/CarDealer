@@ -270,6 +270,7 @@
     <Content Include="Views\Admin\AdminIndex.cshtml" />
     <Content Include="Views\Admin\AdminCatalog.cshtml" />
     <Content Include="Views\Admin\AddInDB.cshtml" />
+    <Content Include="Views\Admin\EditEntryCarInDB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

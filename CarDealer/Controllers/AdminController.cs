@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using CarDealer.Models.Domain;
 using CarDealer.Models.Paging;
 using CarDealer.Filter;
+using System.Data.Entity;
 
 namespace CarDealer.Models.Users.Controllers
 {
@@ -153,7 +154,7 @@ namespace CarDealer.Models.Users.Controllers
             }
         }
 
-
+        [HttpGet]
         [Authorize(Roles = "Administrators")]
         public ActionResult EditEntryCarInDB(int prodID)
         {
@@ -162,22 +163,19 @@ namespace CarDealer.Models.Users.Controllers
 
             if (c != null)
             {
-                IQueryable<OrderDetail> orderDetails = db.OrderDetails;
-
-                foreach (OrderDetail o in orderDetails)
-                {
-                    // нашли машину в заказе -> ! не удаляем
-                    if (o.car_id == prodID)
-                    {
-                        return Redirect("AdminCatalog");
-                    }
-                }
-
-                db.Cars.Remove(c);
-                db.SaveChanges();
+                return View(c);
             }
+            return HttpNotFound();
+        }
 
-            return Redirect("AdminCatalog");
+        [HttpPost]
+        [Authorize(Roles = "Administrators")]
+        public ActionResult EditEntryCarInDB(Car car)
+        {
+            CarContext db = new CarContext();
+            db.Entry(car).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("AdminCatalog");
         }
 
         [Authorize(Roles = "Administrators")]
@@ -204,7 +202,16 @@ namespace CarDealer.Models.Users.Controllers
 
             return Redirect("AdminCatalog");
         }
-        
+
+
+        [HttpGet]
+        [Authorize(Roles = "Administrators")]
+        public ActionResult AddInDB()
+        {
+            return View();
+        }
+
+        [HttpPost]
         [Authorize(Roles = "Administrators")]
         public ActionResult AddInDB(String country, String manufacturer, String model, String type, decimal price = 0)
         {
@@ -215,16 +222,7 @@ namespace CarDealer.Models.Users.Controllers
             else
             {             
                 CarContext db = new CarContext();
-
-                int nextId = db.Cars.Count()+1;
-
-                Car car = db.Cars.Find(nextId);
-                while(car != null)
-                {
-                    nextId++;
-                    car = db.Cars.Find(nextId);
-                }
-
+                
                 Car c = new Car
                 {
                     manufacturer = manufacturer,
@@ -232,7 +230,7 @@ namespace CarDealer.Models.Users.Controllers
                     type = type,
                     price = price,
                     country = country,
-                    car_id = nextId
+                    //car_id = nextId
                 };
 
                 db.Cars.Add(c);
@@ -240,7 +238,7 @@ namespace CarDealer.Models.Users.Controllers
 
             }
 
-            return View();
+            return Redirect("AdminCatalog");
         }
 
         [Authorize(Roles = "Administrators")]

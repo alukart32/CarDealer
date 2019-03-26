@@ -16,7 +16,7 @@ namespace CarDealer.Models.Domain
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int order_id { get; set; }
 
         public DateTime date { get; set; }

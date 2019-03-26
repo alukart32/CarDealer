@@ -33,7 +33,7 @@ namespace CarDealer.Models.Stock
                 firstName = fn,
                 lastName = ln,
                 email = mail,
-                customer_id = db.Customers.Count()
+               // customer_id = db.Customers.Count()
             };
             db.Customers.Add(c);
             db.SaveChanges();
@@ -43,25 +43,30 @@ namespace CarDealer.Models.Stock
         public Order AddOrder(int CustID, ShopBasket myCart)
         {
             // Создаем и инициализируем новый заказ
-            Order order = new Order();
-            order.order_id = db.Orders.Count();
-            order.date = DateTime.Today; // Текущая дата
-            order.customer = CustID; // Ид-р заказчика
-            db.Orders.Add(order); // Добавляем заказ в сущность
-                                  // Проходим по строкам корзины и добавляем их в детали заказа
+            Order o = new Order
+            {
+                date = DateTime.Today, // Текущая дата
+                customer = CustID // Ид-р заказчика
+            };
+            
+            db.Orders.Add(o); // Добавляем заказ в сущность
+                              // Проходим по строкам корзины и добавляем их в детали заказа
+
             foreach (var line in myCart.GetLines())
             {
-                // Создаем и инициализируем новую позицию в заказе
-                OrderDetail oderDetail = new OrderDetail();
-                oderDetail.order_id = order.order_id;
-                oderDetail.car_id = line.ProdID;
-                oderDetail.amount = line.Quantity;
+                OrderDetail ordItems = new OrderDetail
+                {                  
+                    car_id = line.ProdID,
+                    amount = line.Quantity,
+                   // order_id = o.order_id
+            };
+                
                 // Через навигационное свойство добавляем позицию в заказ
-                order.OrderDetails.Add(oderDetail);
+                o.OrderDetails.Add(ordItems);
             };
             db.SaveChanges();
             // Возвращаем новый вставленный заказ
-            return order;
+            return o;
         }
 
         public Order CommitTrans(int custID, ShopBasket myCart, out string message)

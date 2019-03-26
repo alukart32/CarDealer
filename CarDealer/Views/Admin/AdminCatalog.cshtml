@@ -141,7 +141,7 @@
                 @Html.DisplayFor(modelItem => item.price)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { prodID = item.car_id }) |
+                @Html.ActionLink("Edit", "EditEntryCarInDB", new { prodID = item.car_id }) |
                 @Html.ActionLink("Delete", "DeleteFromDB", new { prodID = item.car_id })
             </td>
         </tr>

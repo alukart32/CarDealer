@@ -16,7 +16,7 @@ namespace CarDealer.Models.Domain
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int customer_id { get; set; }
 
         [Required]

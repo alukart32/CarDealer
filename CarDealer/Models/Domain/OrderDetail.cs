@@ -11,12 +11,12 @@ namespace CarDealer.Models.Domain
     {
         [Key]
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
         public int order_id { get; set; }
 
         [Key]
         [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
         public int car_id { get; set; }
 
         public int amount { get; set; }
